@@ -5,7 +5,8 @@ using Lab7.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Azure.Storage.Blobs; // Required for Azure Blob Storage
+using Azure.Storage.Blobs;
+using Microsoft.Extensions.FileProviders; // Required for Azure Blob Storage
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +70,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets")),
+    RequestPath = "/assets"
+});
 
 // Apply pending migrations automatically
 using (var scope = app.Services.CreateScope())
