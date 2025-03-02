@@ -19,7 +19,9 @@ namespace Lab7.Models
         [Required]
         [MaxLength(255)]
         public string PasswordHash { get; set; } // Store hashed passwords
-
+        
+        public string? ProfilePictureUrl { get; set; } 
+        
         [ForeignKey("Role")]
         public int RoleId { get; set; }
         public Role Role { get; set; } // Navigation property

@@ -5,11 +5,11 @@ using Lab7.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Azure.Storage.Blobs; // Required for Azure Blob Storage
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-// Add DbContext for PostgreSQL (or your preferred database)
+// Add DbContext for PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -21,35 +21,47 @@ var keycloakSettings = builder.Configuration
     .GetSection("Keycloak")
     .Get<KeycloakSettings>();
 
-// Configure Authentication
+// Configure Authentication with Keycloak
 builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.Authority = keycloakSettings.Authority;
+    options.Audience = keycloakSettings.ClientId;
+    options.RequireHttpsMetadata = keycloakSettings.RequireHttpsMetadata;
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        options.Authority = keycloakSettings.Authority;
-        options.Audience = keycloakSettings.ClientId;
-        options.RequireHttpsMetadata = keycloakSettings.RequireHttpsMetadata;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateAudience = true,
-            ValidateIssuer = true,
-            RoleClaimType = "roles", // Ensures roles are extracted properly
-            NameClaimType = "preferred_username"
-        };
-    });
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        RoleClaimType = "realm_access",  // Keycloak roles are inside `realm_access`
+        NameClaimType = "preferred_username"
+    };
+});
 
 // Add Authorization with role-based policies
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("StudentOnly", policy => policy.RequireClaim("Role", "Student"));
-    options.AddPolicy("TeacherOnly", policy => policy.RequireClaim("Role", "Teacher"));
+    options.AddPolicy("StudentOnly", policy =>
+        policy.RequireAssertion(context =>
+            context.User.HasClaim(c => 
+                c.Type == "realm_access" && c.Value.Contains("Student"))));
+
+    options.AddPolicy("TeacherOnly", policy =>
+        policy.RequireAssertion(context =>
+            context.User.HasClaim(c => 
+                c.Type == "realm_access" && c.Value.Contains("Teacher"))));
 });
 
 // Register application services
 builder.Services.AddScoped<AuthService>();
+
+// Register Azure Blob Storage if needed
+builder.Services.AddSingleton(x =>
+    new BlobServiceClient(builder.Configuration["AzureStorage:ConnectionString"]));
+builder.Services.AddScoped<BlobStorageService>();
 
 // Add Controllers and Swagger
 builder.Services.AddControllers();
@@ -62,7 +74,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    dbContext.Database.Migrate(); // Ensures database is up to date
+    dbContext.Database.Migrate();
 }
 
 // Enable Swagger in development
