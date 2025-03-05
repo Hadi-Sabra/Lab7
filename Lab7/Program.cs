@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Azure.Storage.Blobs;
+using Lab7.Middleware;
 using Microsoft.Extensions.FileProviders;
 using UniversityAPI.Services; // Required for Azure Blob Storage
 
@@ -95,6 +96,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+app.UseMiddleware<TenantSwitchingMiddleware>();  // Add the tenant middleware
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
