@@ -31,7 +31,7 @@ namespace Lab7.Middleware
 
         private void SetTenantSchema(string tenantId, HttpContext context)
         {
-            var dbContext = context.RequestServices.GetRequiredService<YourDbContext>();
+            var dbContext = context.RequestServices.GetRequiredService<AppDbContext>();
 
             // Set the schema dynamically based on the tenant identifier
             dbContext.Database.ExecuteSqlRaw($"SET search_path TO {tenantId}");
