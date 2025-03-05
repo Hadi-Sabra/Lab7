@@ -10,12 +10,22 @@
         <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0-beta.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
+        <PackageReference Include="RabbitMQ.Client" Version="7.1.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="wwwroot\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="TeacherService\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="TeacherService\appsettings.json" />
+      <_ContentIncludedByDefault Remove="TeacherService\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="TeacherService\obj\TeacherService.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="TeacherService\Properties\launchSettings.json" />
     </ItemGroup>
 
 </Project>

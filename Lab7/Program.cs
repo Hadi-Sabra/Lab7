@@ -6,9 +6,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Azure.Storage.Blobs;
-using Microsoft.Extensions.FileProviders; // Required for Azure Blob Storage
+using Microsoft.Extensions.FileProviders;
+using UniversityAPI.Services; // Required for Azure Blob Storage
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddSingleton<RabbitMqService>();
 
 // Add DbContext for PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
