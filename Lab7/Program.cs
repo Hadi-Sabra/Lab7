@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<RabbitMqService>();
+builder.Services.AddScoped<ITenantProvider, TenantProvider>();  // Register Tenant Provider
 
 // Add DbContext for PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>

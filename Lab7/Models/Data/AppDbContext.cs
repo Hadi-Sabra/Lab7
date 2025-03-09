@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly string _tenantSchema;
 
-    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) 
+    public AppDbContext(DbContextOptions<AppDbContext> options, ITenantProvider tenantProvider) 
         : base(options)
     {
-        _httpContextAccessor = httpContextAccessor;
+        _tenantSchema = tenantProvider.GetTenantSchema();
     }
 
     public DbSet<Course> Courses { get; set; } 
@@ -18,22 +18,6 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        // Determine the tenant schema dynamically
-        var tenantSchema = GetTenantSchemaFromContext();
-        modelBuilder.HasDefaultSchema(tenantSchema);  // This will set the schema dynamically
-    }
-
-    private string GetTenantSchemaFromContext()
-    {
-        // Logic to determine the schema based on the tenant
-        var tenantId = _httpContextAccessor.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == "BranchId")?.Value;
-        if (tenantId == null) 
-        {
-            throw new Exception("Tenant not found");
-        }
-
-        // Assuming tenant schema is based on BranchId
-        return $"branch_{tenantId}";  // Example: "branch_1", "branch_2", etc.
+        modelBuilder.HasDefaultSchema(_tenantSchema);  // Dynamically set schema
     }
 }

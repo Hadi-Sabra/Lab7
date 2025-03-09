@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "IGJ7/ko7eXA=",
-  "success": false,
+  "dgSpecHash": "6ei31ld9UXo=",
+  "success": true,
   "projectFilePath": "C:\\Users\\admin\\RiderProjects\\Lab7\\Lab7\\Lab7.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\admin\\.nuget\\packages\\azure.core\\1.44.1\\azure.core.1.44.1.nupkg.sha512",
@@ -61,15 +61,5 @@
     "C:\\Users\\admin\\.nuget\\packages\\system.threading.ratelimiting\\8.0.0\\system.threading.ratelimiting.8.0.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1105",
-      "level": "Error",
-      "message": "Unable to find project information for 'C:\\Users\\admin\\RiderProjects\\Lab7\\Shared.Contracts\\Shared.Contracts.csproj'. If you are using Visual Studio, this may be because the project is unloaded or not part of the current solution so run a restore from the command-line. Otherwise, the project file may be invalid or missing targets required for restore.",
-      "libraryId": "C:\\Users\\admin\\RiderProjects\\Lab7\\Shared.Contracts\\Shared.Contracts.csproj",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  "logs": []
 }
