@@ -1,26 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Lab7.Models;
+using MassTransit;
+using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts.Events; // Use the shared event
 
-[Route("api/courses")]
 [ApiController]
+[Route("api/courses")]
 public class CourseController : ControllerBase
 {
-    private readonly RabbitMqService _rabbitMqService;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public CourseController(RabbitMqService rabbitMqService)
+    public CourseController(IPublishEndpoint publishEndpoint)
     {
-        _rabbitMqService = rabbitMqService;
+        _publishEndpoint = publishEndpoint;
     }
 
-    [HttpPost("add-course")]
-    public IActionResult AddCourse([FromBody] CourseDto courseDto)
+    [HttpPost]
+    public async Task<IActionResult> CreateCourse([FromBody] CourseCreateDto courseDto)
     {
-        if (courseDto == null) return BadRequest("Invalid data");
+        var newCourse = new Course
+        {
+            Id = 123, 
+            Name = courseDto.Name,
+            Description = courseDto.Description
+        };
 
-        // Publish Course Data to RabbitMQ for Enrollment Microservice
-        _rabbitMqService.PublishMessage("studentQueue", courseDto);
-        _rabbitMqService.PublishMessage("teacherQueue", courseDto);
+        await _publishEndpoint.Publish(new CourseCreated(newCourse.Id, newCourse.Name, newCourse.Description));
 
-        return Ok(new { message = "Course added and message sent to Enrollment Service!" });
+        return Ok(new { message = "Course created and event published" });
     }
 }
 

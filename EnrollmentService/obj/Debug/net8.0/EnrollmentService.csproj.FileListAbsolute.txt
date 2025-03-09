@@ -1,0 +1,8 @@
+C:\Users\admin\RiderProjects\Lab7\EnrollmentService\obj\Debug\net8.0\EnrollmentService.csproj.AssemblyReference.cache
+C:\Users\admin\RiderProjects\Lab7\EnrollmentService\obj\Debug\net8.0\EnrollmentService.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\admin\RiderProjects\Lab7\EnrollmentService\obj\Debug\net8.0\EnrollmentService.AssemblyInfoInputs.cache
+C:\Users\admin\RiderProjects\Lab7\EnrollmentService\obj\Debug\net8.0\EnrollmentService.AssemblyInfo.cs
+C:\Users\admin\RiderProjects\Lab7\EnrollmentService\obj\Debug\net8.0\EnrollmentService.csproj.CoreCompileInputs.cache
+C:\Users\admin\RiderProjects\Lab7\EnrollmentService\obj\Debug\net8.0\EnrollmentService.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\admin\RiderProjects\Lab7\EnrollmentService\obj\Debug\net8.0\EnrollmentService.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\admin\RiderProjects\Lab7\EnrollmentService\obj\Debug\net8.0\EnrollmentService.sourcelink.json

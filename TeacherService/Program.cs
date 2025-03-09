@@ -1,4 +1,32 @@
+using Microsoft.EntityFrameworkCore;
+using TeacherService.Data;
+using TeacherService.Services;
+using MassTransit;
+using Shared.Contracts;
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<CourseCreatedConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq://localhost");
+
+        cfg.ReceiveEndpoint("course-created-event", e =>
+        {
+            e.ConfigureConsumer<CourseCreatedConsumer>(context);
+        });
+    });
+});
+
+builder.Services.AddDbContext<TeacherDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<RabbitMqProducer>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -13,7 +13,9 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
         <PackageReference Include="RabbitMQ.Client" Version="7.1.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+        <PackageReference Include="MassTransit" Version="8.0.0" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -26,6 +28,10 @@
       <_ContentIncludedByDefault Remove="TeacherService\obj\project.assets.json" />
       <_ContentIncludedByDefault Remove="TeacherService\obj\TeacherService.csproj.nuget.dgspec.json" />
       <_ContentIncludedByDefault Remove="TeacherService\Properties\launchSettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Shared.Contracts\Shared.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

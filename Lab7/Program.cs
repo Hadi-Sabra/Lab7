@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Azure.Storage.Blobs;
 using Lab7.Middleware;
+using MassTransit;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -94,6 +95,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+// Configure MassTransit with RabbitMQ
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq://localhost"); // Change if needed
+    });
+});
 
 
 app.UseMiddleware<TenantSwitchingMiddleware>();  // Add the tenant middleware

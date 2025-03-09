@@ -1,4 +1,32 @@
+using EnrollmentService.Data;
+using Microsoft.EntityFrameworkCore;
+using MassTransit;
+using Shared.Contracts;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<CourseCreatedConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq://localhost");
+
+        cfg.ReceiveEndpoint("course-created-event", e =>
+        {
+            e.ConfigureConsumer<CourseCreatedConsumer>(context);
+        });
+    });
+});
+
+// Configure database
+builder.Services.AddDbContext<EnrollmentDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register RabbitMQ listener as a hosted service
+builder.Services.AddHostedService<RabbitMqListener>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

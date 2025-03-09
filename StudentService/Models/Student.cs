@@ -1,6 +1,14 @@
-﻿namespace StudentService.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class Student
+namespace StudentService.Models
 {
-    
+    public class Student
+    {
+        [Key]
+        public int Id { get; set; }
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public string Email { get; set; }
+    }
 }
